@@ -17,7 +17,7 @@ footer {
     margin: auto;
 }
 
-header, h1 {
+header {
     background-color: tomato;
     width: 100%;
     font-size: 100px;
@@ -34,6 +34,11 @@ td {
     padding: 20px;
     border-collapse: collapse;
  }
+
+li, .informacja, .wynik_informacji {
+    background-color: darkblue;
+    margin: 5px;
+}
  
 th {
     border: 1px solid yellowgreen;
@@ -91,7 +96,6 @@ th {
     margin-right: 15%;
     font-family: sans-serif;
     font-size: 30px;
-    background-color: blue;
 }
 
 #wynik_informacji {
@@ -114,4 +118,11 @@ th {
 .pogoda, .opis_lotu, #nazwa_miasta {
     font-family: sans-serif;
     font-size: 30px;
+}
+
+h1, #naglowek {
+    width: 50%;
+    margin: auto;
+    background-color: darkblue;
+    margin-bottom: 20px;
 }

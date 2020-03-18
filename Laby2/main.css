@@ -2,7 +2,7 @@ body {
     font-family: sans-serif;
     text-align: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; 
+    background-attachment: fixed;
     background-size: 100% 100%;
     background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
 }
@@ -33,25 +33,25 @@ td {
     border: 1px solid yellowgreen;
     padding: 20px;
     border-collapse: collapse;
- }
+}
 
 li, .informacja, .wynik_informacji {
     background-color: darkblue;
     margin: 5px;
 }
- 
+
 th {
     border: 1px solid yellowgreen;
     padding: 20px;
     border-collapse: collapse;
- }
+}
 
- #przycisk_powrotu {
+#przycisk_powrotu {
     width: 20%;
     margin: auto;
     margin-bottom: 2%;
     background-color: tomato;
- }
+}
 
 #logo_firmy {
     display: block;

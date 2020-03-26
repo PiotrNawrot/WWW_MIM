@@ -1,65 +1,38 @@
 body {
     font-family: sans-serif;
     text-align: center;
-    background-repeat: no-repeat;
+    max-width: 2500px;
     background-attachment: fixed;
     background-size: 100% 100%;
     background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
 }
 
-footer {
-    background-color: tomato;
-    color: green;
-    font-family: sans-serif;
-    font-size: 30px;
-    width: 50%;
-    text-align: center;
-    margin: auto;
-}
-
 header {
-    background-color: tomato;
+    font-size: 50px;
     width: 100%;
-    font-size: 100px;
-    text-align: center;
+    margin: auto;
 }
 
 table {
-    margin-top: 23%;
-    width: 100%;
+    background-color: goldenrod;
+    border-collapse: collapse;
 }
 
 td, th {
-    border: 3px solid black;
-    margin: 1px;
-    padding: 20px;
-    border-collapse: collapse;
+    border: 2px solid black;
+    padding: 10px;
 }
 
-li {
-    margin: 2px;
-    border: 3px solid black;
-    border-collapse: collapse;
+span {
+    display: inline-block;
 }
 
-#tabela_pasazerow {
-    width: 50%;
+footer {
+    font-size: 30px;
+    font-weight: bold;
+    width: 100%;
     margin: auto;
-    text-align: center;
-    padding-left: 0px;
-    margin-bottom: 20px;
-}
-
-.informacja, .wynik_informacji {
-    background-color: darkcyan;
-    margin: 5px;
-}
-
-#przycisk_powrotu {
-    width: 20%;
-    margin: auto;
-    margin-bottom: 2%;
-    background-color: tomato;
+    margin-top: 20px;
 }
 
 #logo_firmy {
@@ -67,71 +40,181 @@ li {
     width: 15%;
     height: 4%;
     margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
-#pierwszy {
-    background-color: darkcyan;
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-    border: burlywood;
+#flight_reservation {
+    font-size: 20px;
+    font-weight: bold;
 }
 
-#drugi {
-    background-color: brown;
-    width: 50%;
-    margin: auto;
-}
-
-#trzeci {
-    width: 200px;
-    background-color: yellow;
-    position: absolute;
-    left: 40%;
-    top: 50%;
-}
-
-#kontener_tabelki {
-    position: relative;
-}
-
-#opis_miast_lotu {
+.flight_town_description {
     width: 80%;
     margin: auto;
 }
 
-#informacje_o_locie {
+a:link, a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+.passengers_table li {
+    background-color: darkcyan;
+    width: 40%;
+    margin: auto;
+}
+
+.passenger:nth-child(odd) {
+    background-color: rgb(11, 68, 19);
+}
+
+.popup{
+    background-color: tomato;
+    position: absolute;
+    left: 70%;
+    top: 134%;
+
+    display: none;
+}
+
+.passenger:hover .popup{
+    display: initial;
+}
+
+.flight_information {
     margin-left: 15%;
     margin-right: 15%;
-    font-family: sans-serif;
     font-size: 30px;
 }
 
-#wynik_informacji {
-    font-size: 15px;
+.information_title, .information {
+    background-color: darkcyan;
+    margin: 5px;
 }
 
-.miasto {
-    height: 33%;
-    width: 33%;
+.flexbox_container {
     margin: auto;
-    text-align: center;
-    background-color: tomato;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
-.zdjecie {
+.small_delay {
+    background-color: rgb(231, 229, 96);
+}
+
+.large_delay {
+    background-color: rgb(236, 163, 68);
+}
+
+.cancelled {
+    background-color: rgba(236, 32, 53, 0.51);
+}
+
+.menu_list {
+    background-color: goldenrod;
+    margin: 0px;
+    list-style: none;
+    padding-left: 20px;
+    text-align: left;
+    font-size: 20px;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+
+.town {
+    background-color: tomato;
+    width: 33%;
+    height: 33%;
+    margin: auto;
+}
+
+.picture, .town_picture {
     width: 50%;
     height: 50%;
 }
 
-.pogoda, .opis_lotu, #nazwa_miasta {
-    font-family: sans-serif;
+.weather, .town_description, .town_name {
     font-size: 30px;
 }
 
-h1, .naglowek {
+.information_header, h1 {
+    background-color: darkcyan;
     width: 50%;
     margin: auto;
-    background-color: darkcyan;
+    margin-top: 5px;
     margin-bottom: 20px;
 }
+
+.return_button {
+    width: 100%;
+    font-size: 25px;
+    margin: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media only screen and (max-width: 767px) {
+    body {
+        font-family: sans-serif;
+        text-align: center;
+        background-attachment: scroll;
+        background-size: auto;
+        background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
+    }
+
+    .flexbox_container {
+        flex-direction: column;
+    }
+
+    .information_header {
+        width: auto;
+    }
+
+    .town {
+        width: auto;
+        height: auto;
+    }
+
+    .town_picture {
+        display: none;
+    }
+
+    .weather {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    body {
+        font-family: sans-serif;
+        text-align: center;
+        background-attachment: scroll;
+        background-size: auto;
+        background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
+    }
+
+    #page_menu {
+        margin-right: 25%;
+        margin-left: 25%;
+    }
+
+    td, th {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .information_header {
+        width: auto;
+    }
+
+    .town {
+        width: auto;
+        height: auto;
+    }
+}
+
+

@@ -49,6 +49,10 @@ footer {
     margin-bottom: 50px;
 }
 
+#reservation_form {
+    text-align: left;
+}
+
 #flight_reservation {
     font-size: 20px;
     font-weight: bold;
@@ -109,8 +113,6 @@ a:link, a:visited {
 #flight_table {
     grid-area: flight_table;
     align-content: center;
-    margin-left: 5%;
-    margin-right: 5%;
     margin-bottom: 40px;
     top: 0px;
     left: 0px;

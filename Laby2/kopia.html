@@ -11,12 +11,11 @@
 </head>
 
 <body>
-<section id = "hide_square">
-    Rezerwacja się udała, dobra robota!
-</section>
-
 <section class="grid_container">
     <header>R E L A K S</header>
+    <section id = "hide_square">
+        Rezerwacja się udała, dobra robota!
+    </section>
     
     <nav id = "page_menu">
         <ul class="menu_list">
@@ -50,7 +49,7 @@
         <p id = "info_active_flights">W tabeli znajdują się aktywne loty. Proszę rezerwować!</p>
         <table>
             <tr>
-                <th>Nr lotu</th>
+                <th>Nr</th>
                 <th>Skąd</th>
                 <th>Dokąd</th>
                 <th>Data</th>
@@ -58,7 +57,7 @@
             </tr>
 
             <tr>
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Kraków</td>
                 <td>Wrocław</td>
                 <td>21 marca 2019</td>
@@ -66,7 +65,7 @@
             </tr>
 
             <tr>
-                <td><a href="dobryLot.html">Drugi lot</a></td>
+                <td><a href="dobryLot.html">2</a></td>
                 <td>Radom</td>
                 <td>Rzym</td>
                 <td>14 lipca 2020</td>
@@ -74,7 +73,7 @@
             </tr>
 
             <tr>
-                <td><a href="dobryLot.html">Trzeci lot</a></td>
+                <td><a href="dobryLot.html">3</a></td>
                 <td>Warszawa</td>
                 <td>Teneryfa</td>
                 <td>14 lipca 2020</td>
@@ -82,7 +81,7 @@
             </tr>
 
             <tr>
-                <td><a href="dobryLot.html">Czwarty lot</a></td>
+                <td><a href="dobryLot.html">4</a></td>
                 <td>Warszawa</td>
                 <td>Radom</td>
                 <td>1 kwietnia 2020</td>
@@ -90,7 +89,7 @@
             </tr>
 
             <tr>
-                <td><a href="dobryLot.html">Piąty lot</a></td>
+                <td><a href="dobryLot.html">5</a></td>
                 <td>Warszawa</td>
                 <td>Hamaczek</td>
                 <td>25 czerwca 2019</td>
@@ -100,7 +99,7 @@
     </section>
 
     <section id="flight_changes">
-        <table>
+        <table id="flight_changes_table">
             <tr>
                 <th>Nr lotu</th>
                 <th>Skąd</th>
@@ -110,7 +109,7 @@
             </tr>
 
             <tr class = "small_delay">
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Krakow</td>
                 <td>Wrocław</td>
                 <td>14:28 - 19.02.2020</td>
@@ -118,7 +117,7 @@
             </tr>
 
             <tr class = "small_delay">
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Krakow</td>
                 <td>Wrocław</td>
                 <td>14:28 - 20.02.2020</td>
@@ -126,7 +125,7 @@
             </tr>
 
             <tr class = "small_delay">
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Krakow</td>
                 <td>Wrocław</td>
                 <td>14:28 - 21.02.2020</td>
@@ -134,7 +133,7 @@
             </tr>
 
             <tr class = "small_delay">
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Krakow</td>
                 <td>Wrocław</td>
                 <td>14:28 - 22.02.2020</td>
@@ -142,7 +141,7 @@
             </tr>
 
             <tr class = "small_delay">
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Krakow</td>
                 <td>Wrocław</td>
                 <td>14:28 - 23.02.2020</td>
@@ -150,7 +149,7 @@
             </tr>
 
             <tr class = "small_delay">
-                <td><a href="dobryLot.html">Pierwszy Lot</a></td>
+                <td><a href="dobryLot.html">1</a></td>
                 <td>Krakow</td>
                 <td>Wrocław</td>
                 <td>14:28 - 24.02.2020</td>
@@ -158,7 +157,7 @@
             </tr>
 
             <tr class = "cancelled">
-                <td><a href="dobryLot.html">Drugi lot</a></td>
+                <td><a href="dobryLot.html">2</a></td>
                 <td>Radom</td>
                 <td>Rzym</td>
                 <td>12:37 - 24.02.2020</td>
@@ -166,7 +165,7 @@
             </tr>
 
             <tr class = "large_delay">
-                <td><a href="dobryLot.html">Trzeci lot</a></td>
+                <td><a href="dobryLot.html">3</a></td>
                 <td>Warszawa</td>
                 <td>Teneryfa</td>
                 <td>20:15 - 24.02.2020</td>
@@ -174,35 +173,48 @@
             </tr>
         </table>
 
-        <p id = "flight_reservation">Rezerwacja lotu</p>
-
         <form id="reservation_form">
-            <label for="origin">Skąd:</label>
-            <select id="origin" name="origin">
-                <option value="Radom">Radom</option>
-                <option value="Warszawa">Warszawa</option>
-                <option value="Krakow">Krakow</option>
-            </select><br>
+            <p id = "flight_reservation">Rezerwacja lotu</p>
+            <table>
+                <tr>
+                    <td><label for="origin">Skąd:</label></td>
+                    <td>
+                        <select id="origin" name="origin">
+                        <option value="Radom">Radom</option>
+                        <option value="Warszawa">Warszawa</option>
+                        <option value="Krakow">Krakow</option>
+                        </select>
+                    </td>
+                </tr>
 
-            <label for="destination">Dokąd:</label>
-            <select id="destination" name="destination">
-                <option value="Wrocław">Wrocław</option>
-                <option value="Teneryfa">Teneryfa</option>
-                <option value="Rzym">Rzym</option>
-            </select><br>
+                <tr>
+                    <td><label for="destination">Dokąd:</label></td>
+                    <td>
+                        <select id="destination" name="destination">
+                        <option value="Wrocław">Wrocław</option>
+                        <option value="Teneryfa">Teneryfa</option>
+                        <option value="Rzym">Rzym</option>
+                        </select>
+                    </td>    
+                </tr>
 
-            <label for="name">Imię i nazwisko:</label>
-            <input type="text" id="name" name="name"><br>
+                <tr>
+                    <td><label for="name">Imię i nazwisko:</label></td>
+                    <td>
+                        <input type="text" id="name" name="name">
+                    </td>    
+                </tr>
+                
+                <tr>
+                    <td><label for="date">Data lotu:</label></td>
+                    <td>
+                        <input type="date" id="date" name="date" value="2020-03-22">
+                    </td>    
+                </tr>               
+            </table>
 
-            <label for="date">Data lotu:</label>
-            <input type="date" id="date" name="date" value="2020-03-22"><br>
-
-            <button>Rezerwuj lot</button>
-            
-            <button onclick="
-                document.getElementById('name').value = '';
-                document.getElementById('date').value = '2020-03-22'"
-            >Wyczyść</button>
+            <input type="submit" value="Rezerwuj">
+            <input type="reset" value="Wyczyść">
         </form>
     </section>
 

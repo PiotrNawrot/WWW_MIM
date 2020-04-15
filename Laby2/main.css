@@ -17,12 +17,16 @@ table {
     background-color: goldenrod;
     border-collapse: collapse;
     width: 100%;
-    padding: 5px;
 }
 
 td, th {
     border: 2px solid black;
     padding: 1px;
+    border-collapse: collapse;
+}
+
+#flight_changes_table td, th {
+    font-size: 11px;
 }
 
 span {
@@ -39,6 +43,7 @@ footer {
 }
 
 #info_active_flights {
+    margin-top: 0;
     background-color: pink;
 }
 
@@ -51,8 +56,7 @@ footer {
 
 #reservation_form {
     text-align: left;
-    position: absolute;
-    bottom: 0;
+    grid-area: reservation_form;
 }
 
 #flight_reservation {
@@ -60,7 +64,6 @@ footer {
     font-size: 20px;
     font-weight: bold;
     float: bottom;
-    /* margin-top: 100%; */
 }
 
 .flight_town_description {
@@ -79,21 +82,17 @@ a:link, a:visited {
     margin: auto;
 }
 
-.passenger:nth-child(odd) {
+.passenger:nth-child(4n+1) {
     background-color: rgb(11, 68, 19);
 }
 
 .popup{
-    background-color: tomato;
-    position: absolute;
-    left: 70%;
-    top: 134%;
-
     display: none;
 }
 
-.passenger:hover .popup{
-    display: initial;
+.passengers_table > li:hover + .popup{
+    background-color: tomato;   
+    display: block;
 }
 
 .flight_information {
@@ -107,13 +106,8 @@ a:link, a:visited {
     margin: 5px;
 }
 
-#flight_changes{
-    grid-area: flight_changes;
-    position: relative;
-}
-
 #flight_changes_table{
-    margin-bottom: 180px;
+    grid-area: flight_changes_table;
 }
 
 #page_menu{
@@ -123,9 +117,6 @@ a:link, a:visited {
 #flight_table {
     grid-area: flight_table;
     align-content: center;
-    margin-bottom: 40px;
-    top: 0px;
-    left: 0px;
 }
 
 #hide_square {
@@ -143,13 +134,12 @@ a:link, a:visited {
 .grid_container {
     display: grid;
     grid-column-gap: 15px;
-    /* grid-row-gap: 15px; */
-
     grid-template-columns: 200px 3fr 1fr;
-    /* grid-template-rows: auto; */
+
     grid-template-areas:
       "header header header"
-      "page_menu flight_table flight_changes"
+      "page_menu flight_table flight_changes_table"
+      ". flight_table reservation_form"
       "footer footer footer";
 }
 
@@ -228,7 +218,8 @@ a:link, a:visited {
           "header"
           "page_menu"
           "flight_table"
-          "flight_changes"
+          "flight_changes_table"
+          "reservation_form"
           "footer";
     }
 
@@ -250,7 +241,7 @@ a:link, a:visited {
     }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1279px) {
     body {
         font-family: sans-serif;
         text-align: center;
@@ -269,7 +260,8 @@ a:link, a:visited {
         grid-template-areas:
           "header header"
           "page_menu page_menu"
-          "flight_table flight_changes"
+          "flight_table flight_changes_table"
+          "flight_table reservation_form"
           "footer footer";
     }
 
@@ -292,5 +284,3 @@ a:link, a:visited {
         height: auto;
     }
 }
-
-

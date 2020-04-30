@@ -49,7 +49,7 @@ var changesTable = document.querySelector('#flight_changes_table');
 setDefaultsOnWebsite();
 function setDefaultsOnWebsite() {
     createDivAppendToBody("cześć wszystkim");
-    submitButton.addEventListener("click", function (e) { return preventDefaultAndRun(e, checkForm); });
+    // submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, checkForm));
     resetButton.addEventListener("click", function (e) { return preventDefaultAndRun(e, fillFormWithDefault); });
     closePopUpButton.onclick = function () {
         hideElement(popupAlert);
@@ -82,7 +82,14 @@ function Zadanie7_3() {
     changesTable.addEventListener("click", colorRightColumn);
 }
 function Zadanie7_4() {
-    form.onchange = function () {
+    // form.onchange = () => {
+    //     if (valid_form()){
+    //         showElement(submitButton);
+    //     } else {
+    //         hideElement(submitButton);
+    //     }
+    // }
+    var tmpFunction = function () {
         if (valid_form()) {
             showElement(submitButton);
         }
@@ -90,7 +97,9 @@ function Zadanie7_4() {
             hideElement(submitButton);
         }
     };
-    submitButton.addEventListener("click", presentReservationForm);
+    tmpFunction();
+    form.addEventListener("input", tmpFunction);
+    submitButton.addEventListener("click", function (e) { return preventDefaultAndRun(e, presentReservationForm); });
 }
 function presentReservationForm() {
     var wiadomosc = "Udało się\n" +
@@ -215,9 +224,13 @@ function showPopUp(messege) {
 }
 function showElement(element) {
     element.style.visibility = 'visible';
+    if (element instanceof HTMLInputElement)
+        element.disabled = false;
 }
 function hideElement(element) {
     element.style.visibility = 'hidden';
+    if (element instanceof HTMLInputElement)
+        element.disabled = true;
 }
 function createDivAppendToBody(text) {
     var newElement = document.createElement('div');

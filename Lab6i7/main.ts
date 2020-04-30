@@ -20,7 +20,7 @@ setDefaultsOnWebsite();
 function setDefaultsOnWebsite() {
     createDivAppendToBody("cześć wszystkim");
 
-    submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, checkForm));
+    // submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, checkForm));
     resetButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, fillFormWithDefault));   
     closePopUpButton.onclick = () => {
         hideElement(popupAlert);
@@ -63,15 +63,26 @@ function Zadanie7_3() {
 }
 
 function Zadanie7_4() {
-    form.onchange = () => {
+    // form.onchange = () => {
+    //     if (valid_form()){
+    //         showElement(submitButton);
+    //     } else {
+    //         hideElement(submitButton);
+    //     }
+    // }
+
+    const tmpFunction = () => {
         if (valid_form()){
             showElement(submitButton);
         } else {
             hideElement(submitButton);
         }
-    }
+    };
 
-    submitButton.addEventListener("click", presentReservationForm);
+    tmpFunction();
+
+    form.addEventListener("input", tmpFunction);
+    submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, presentReservationForm));
 }
 
 function presentReservationForm() {
@@ -197,10 +208,16 @@ function showPopUp(messege : string) {
 
 function showElement(element : HTMLElement) {
     element.style.visibility = 'visible';
+
+    if (element instanceof HTMLInputElement)
+        element.disabled = false;
 }
 
 function hideElement(element : HTMLElement) {
     element.style.visibility = 'hidden';
+    
+    if (element instanceof HTMLInputElement)
+        element.disabled = true;
 }
 
 function createDivAppendToBody(text: string) {

@@ -39,6 +39,8 @@ var submitButton = document.querySelector("input[type=submit]");
 var resetButton = document.querySelector("input[type=reset]");
 var nameInput = document.querySelector("input[name=name]");
 var dateInput = document.querySelector("input[name=date]");
+var fromInput = document.querySelector("select[name=origin]");
+var toInput = document.querySelector("select[name=destination]");
 var popupAlert = document.querySelector('#hide_square');
 var popupMessege = document.querySelector('#popup_messege');
 var closePopUpButton = document.querySelector('#close_popup');
@@ -55,7 +57,9 @@ function setDefaultsOnWebsite() {
     // teczoweKolory2(listOfFlights);
     fetchGithubPicture();
     // Zadanie7_1();
-    Zadanie7_2();
+    // Zadanie7_2();
+    // Zadanie7_3();
+    Zadanie7_4();
 }
 function Zadanie7_1() {
     changesTable.addEventListener("click", colorRightColumn);
@@ -73,7 +77,38 @@ function Zadanie7_2() {
     var wholeGrid = document.querySelector('#grid_container');
     wholeGrid.addEventListener("click", handleClickWithTarget);
 }
+function Zadanie7_3() {
+    // Nie wiem czy do końca dobrze rozumiem treść zadania, ale jeśli chodzi o tabelkę opóźnionych lotów to po prostu robimy
+    changesTable.addEventListener("click", colorRightColumn);
+}
+function Zadanie7_4() {
+    form.onchange = function () {
+        if (valid_form()) {
+            showElement(submitButton);
+        }
+        else {
+            hideElement(submitButton);
+        }
+    };
+    submitButton.addEventListener("click", presentReservationForm);
+}
+function presentReservationForm() {
+    var wiadomosc = "Udało się\n" +
+        ("Pasazer: " + nameInput.value + "\n") +
+        ("Sk\u0105d: " + fromInput.value + "\n") +
+        ("Dok\u0105d: " + toInput.value + "\n") +
+        ("Data: " + dateInput.value + "\n");
+    showPopUp(wiadomosc);
+}
+function fib(x) {
+    if (x <= 1)
+        return 1;
+    return fib(x - 1) + fib(x - 2);
+}
+var clicks = 0;
 function colorRightColumn() {
+    console.log(fib(10 * clicks++)); // Zadanie 7_4
+    // Przeglądarka po kilku kliknięciach się zawiesza, bo obliczenia trwają są zbyt kosztowne
     var currentColor = window.getComputedStyle(form).getPropertyValue('background-color');
     var _a = /rgb[a]?\((\d+),[^0-9]*(\d+),[^0-9]*(\d+)[,]?[^0-9]*(\d*)\)/.exec(currentColor), _ = _a[0], colorsAsText = _a.slice(1);
     var colors = [];
@@ -152,17 +187,29 @@ function fillFormWithDefault() {
 function getCurrentDate() {
     return new Date().toISOString().slice(0, 10);
 }
+function valid_form() {
+    if (dateInput.value == "" || dateInput.value < getCurrentDate()) {
+        return false;
+    }
+    if (nameInput.value == "") {
+        return false;
+    }
+    if (nameInput.value.search(' ') == -1) { // imie i nazwisko, a nie jeden wyraz
+        return false;
+    }
+    return true;
+}
 function checkForm() {
     if (dateInput.value == "" || dateInput.value < getCurrentDate()) {
-        showInvalidPopUp("Niepoprawna data");
+        showPopUp("Niepoprawna data");
         return;
     }
     if (nameInput.value == "") {
-        showInvalidPopUp("Wpisz imię i nazwisko");
+        showPopUp("Wpisz imię i nazwisko");
         return;
     }
 }
-function showInvalidPopUp(messege) {
+function showPopUp(messege) {
     popupMessege.innerHTML = messege;
     showElement(popupAlert);
 }

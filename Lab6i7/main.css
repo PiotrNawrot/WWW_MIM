@@ -1,0 +1,294 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    max-width: 2500px;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
+}
+
+header {
+    font-size: 50px;
+    width: 100%;
+    grid-area: header;
+}
+
+table {
+    background-color: goldenrod;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 2px solid black;
+    padding: 1px;
+    border-collapse: collapse;
+}
+
+#flight_changes_table td, th {
+    font-size: 11px;
+}
+
+span {
+    display: inline-block;
+}
+
+footer {
+    font-size: 30px;
+    font-weight: bold;
+    width: 100%;
+    margin: auto;
+    margin-top: 20px;
+    grid-area: footer;
+}
+
+#info_active_flights {
+    margin-top: 0;
+    background-color: pink;
+}
+
+#logo_firmy {
+    display: block;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 50px;
+}
+
+#reservation_form {
+    text-align: left;
+    grid-area: reservation_form;
+}
+
+#flight_reservation {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    float: bottom;
+}
+
+.flight_town_description {
+    width: 80%;
+    margin: auto;
+}
+
+a:link, a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+.passengers_table li {
+    background-color: darkcyan;
+    width: 40%;
+    margin: auto;
+}
+
+.passenger:nth-child(4n+1) {
+    background-color: rgb(11, 68, 19);
+}
+
+.popup{
+    display: none;
+}
+
+.passengers_table > li:hover + .popup{
+    background-color: tomato;   
+    display: block;
+}
+
+.flight_information {
+    margin-left: 15%;
+    margin-right: 15%;
+    font-size: 30px;
+}
+
+.information_title, .information {
+    background-color: darkcyan;
+    margin: 5px;
+}
+
+#flight_changes_table{
+    grid-area: flight_changes_table;
+}
+
+#page_menu{
+    grid-area: page_menu;
+}
+
+#flight_table {
+    grid-area: flight_table;
+    align-content: center;
+}
+
+#hide_square {
+    visibility: hidden;
+    font-size: 50px;
+    background-color: pink;
+    opacity: 95%;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+}
+
+#close_popup { 
+    width: 30%;
+    margin: auto;
+    font-size: 50px;
+    margin-top: 20%;
+}
+
+#grid_container {
+    display: grid;
+    grid-column-gap: 15px;
+    grid-template-columns: 200px 3fr 1fr;
+
+    grid-template-areas:
+      "header header header"
+      "page_menu flight_table flight_changes_table"
+      ". flight_table reservation_form"
+      "footer footer footer";
+}
+
+.small_delay {
+    background-color: rgb(231, 229, 96);
+}
+
+.large_delay {
+    background-color: rgb(236, 163, 68);
+}
+
+.cancelled {
+    background-color: rgba(236, 32, 53, 0.51);
+}
+
+.menu_list {
+    background-color: goldenrod;
+    margin: 0px;
+    list-style: none;
+    padding-left: 20px;
+    text-align: left;
+    font-size: 20px;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+
+.town {
+    background-color: tomato;
+    width: 33%;
+    height: 33%;
+    margin: auto;
+}
+
+.picture, .town_picture {
+    width: 50%;
+    height: 50%;
+}
+
+.weather, .town_description, .town_name {
+    font-size: 30px;
+}
+
+.information_header, h1 {
+    background-color: darkcyan;
+    width: 50%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.return_button {
+    width: 100%;
+    font-size: 25px;
+    margin: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media only screen and (max-width: 767px) {
+    body {
+        font-family: sans-serif;
+        text-align: center;
+        background-attachment: scroll;
+        background-size: auto;
+        background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
+    }
+
+    .grid_container {
+        display: grid;
+        grid-column-gap: 15px;
+        grid-row-gap: 15px;
+    
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "header"
+          "page_menu"
+          "flight_table"
+          "flight_changes_table"
+          "reservation_form"
+          "footer";
+    }
+
+    .information_header {
+        width: auto;
+    }
+
+    .town {
+        width: auto;
+        height: auto;
+    }
+
+    .town_picture {
+        display: none;
+    }
+
+    .weather {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+    body {
+        font-family: sans-serif;
+        text-align: center;
+        background-attachment: scroll;
+        background-size: auto;
+        background-image: url(https://img.gta5-mods.com/q95/images/gta-v-custom-vice-city-intro-replaces-original-rockstar-logo-intro/0cb71c-Custom%20Intro.jpg)
+    }
+
+    .grid_container {
+        display: grid;
+        grid-column-gap: 15px;
+        grid-row-gap: 15px;
+    
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "header header"
+          "page_menu page_menu"
+          "flight_table flight_changes_table"
+          "flight_table reservation_form"
+          "footer footer";
+    }
+
+    .menu_list{
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+
+    td, th {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .information_header {
+        width: auto;
+    }
+
+    .town {
+        width: auto;
+        height: auto;
+    }
+}

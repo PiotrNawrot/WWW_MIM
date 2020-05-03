@@ -48,9 +48,8 @@ var listOfFlights = document.querySelector('#flight_table');
 var changesTable = document.querySelector('#flight_changes_table');
 setDefaultsOnWebsite();
 function setDefaultsOnWebsite() {
-    createDivAppendToBody("cześć wszystkim");
-    // submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, checkForm));
-    resetButton.addEventListener("click", function (e) { return preventDefaultAndRun(e, fillFormWithDefault); });
+    // createDivAppendToBody("cześć wszystkim");
+    resetButton.addEventListener("click", function (e) { return fillFormWithDefault(e); });
     closePopUpButton.onclick = function () {
         hideElement(popupAlert);
     };
@@ -78,30 +77,23 @@ function Zadanie7_2() {
     wholeGrid.addEventListener("click", handleClickWithTarget);
 }
 function Zadanie7_3() {
-    // Nie wiem czy do końca dobrze rozumiem treść zadania, ale jeśli chodzi o tabelkę opóźnionych lotów to po prostu robimy
     changesTable.addEventListener("click", colorRightColumn);
 }
 function Zadanie7_4() {
-    // form.onchange = () => {
-    //     if (valid_form()){
-    //         showElement(submitButton);
-    //     } else {
-    //         hideElement(submitButton);
-    //     }
-    // }
-    var tmpFunction = function () {
+    var submitButtonListener = function () {
         if (valid_form()) {
-            showElement(submitButton);
+            submitButton.removeAttribute('disabled');
         }
         else {
-            hideElement(submitButton);
+            submitButton.setAttribute('disabled', 'yes');
         }
     };
-    tmpFunction();
-    form.addEventListener("input", tmpFunction);
-    submitButton.addEventListener("click", function (e) { return preventDefaultAndRun(e, presentReservationForm); });
+    submitButtonListener();
+    form.addEventListener("input", submitButtonListener);
+    submitButton.addEventListener("click", function (e) { return presentReservationForm(e); });
 }
-function presentReservationForm() {
+function presentReservationForm(e) {
+    e.preventDefault();
     var wiadomosc = "Udało się\n" +
         ("Pasazer: " + nameInput.value + "\n") +
         ("Sk\u0105d: " + fromInput.value + "\n") +
@@ -122,7 +114,7 @@ function colorRightColumn() {
     var _a = /rgb[a]?\((\d+),[^0-9]*(\d+),[^0-9]*(\d+)[,]?[^0-9]*(\d*)\)/.exec(currentColor), _ = _a[0], colorsAsText = _a.slice(1);
     var colors = [];
     for (var i = 0; i < 3; i++)
-        colors[i] = (parseInt(colorsAsText[i]) + 0x20) % 256;
+        colors[i] = (Number(colorsAsText[i]) + 0x20) % 256;
     changesTable.style.backgroundColor = "rgb(" + colors[0] + "," + colors[1] + "," + colors[2] + ")";
     form.style.backgroundColor = "rgb(" + colors[0] + "," + colors[1] + "," + colors[2] + ")";
 }
@@ -185,38 +177,26 @@ function teczoweKolory2(el) {
 function set_timeout(timeOfTimeout) {
     return new Promise(function (resolve, reject) { return setTimeout(function () { resolve(); }, timeOfTimeout); });
 }
-function preventDefaultAndRun(e, someFunction) {
+function fillFormWithDefault(e) {
     e.preventDefault();
-    someFunction();
-}
-function fillFormWithDefault() {
-    nameInput.value = "Tutaj wpisz imię";
+    nameInput.value = "";
     dateInput.value = getCurrentDate();
 }
 function getCurrentDate() {
     return new Date().toISOString().slice(0, 10);
 }
 function valid_form() {
-    if (dateInput.value == "" || dateInput.value < getCurrentDate()) {
+    if (dateInput.value === "" || dateInput.value < getCurrentDate()) {
         return false;
     }
-    if (nameInput.value == "") {
+    var nameSplit = nameInput.value.split(' ');
+    if (nameSplit.length !== 2) {
         return false;
     }
-    if (nameInput.value.search(' ') == -1) { // imie i nazwisko, a nie jeden wyraz
+    if (nameSplit[0] === "" || nameSplit[1] === "") {
         return false;
     }
     return true;
-}
-function checkForm() {
-    if (dateInput.value == "" || dateInput.value < getCurrentDate()) {
-        showPopUp("Niepoprawna data");
-        return;
-    }
-    if (nameInput.value == "") {
-        showPopUp("Wpisz imię i nazwisko");
-        return;
-    }
 }
 function showPopUp(messege) {
     popupMessege.innerHTML = messege;

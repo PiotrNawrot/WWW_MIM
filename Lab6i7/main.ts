@@ -18,10 +18,9 @@ let changesTable = document.querySelector('#flight_changes_table') as HTMLTableE
 setDefaultsOnWebsite();
 
 function setDefaultsOnWebsite() {
-    createDivAppendToBody("cześć wszystkim");
+    // createDivAppendToBody("cześć wszystkim");
 
-    // submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, checkForm));
-    resetButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, fillFormWithDefault));   
+    resetButton.addEventListener("click", (e:Event) => fillFormWithDefault(e));
     closePopUpButton.onclick = () => {
         hideElement(popupAlert);
     }
@@ -35,7 +34,7 @@ function setDefaultsOnWebsite() {
 }
 
 function Zadanie7_1() {
-    changesTable.addEventListener("click", colorRightColumn);    
+    changesTable.addEventListener("click", colorRightColumn);
     form.addEventListener("click", colorRightColumn);
 
     // Czy kliknięcie w pole input formularza zmienia kolor tła? Ilu handlerów potrzeba do zrobienia zadania?
@@ -43,7 +42,7 @@ function Zadanie7_1() {
 }
 
 function handleClickWithTarget(ev: MouseEvent) {
-    let target = event.target as Node;
+    const target = event.target as Node;
 
     if (changesTable.contains(target) || form.contains(target)){
         colorRightColumn();
@@ -51,45 +50,37 @@ function handleClickWithTarget(ev: MouseEvent) {
 }
 
 function Zadanie7_2() {
-    let wholeGrid = document.querySelector('#grid_container') as HTMLElement;
+    const wholeGrid = document.querySelector('#grid_container') as HTMLElement;
 
     wholeGrid.addEventListener("click", handleClickWithTarget);
 }
 
 function Zadanie7_3() {
-    // Nie wiem czy do końca dobrze rozumiem treść zadania, ale jeśli chodzi o tabelkę opóźnionych lotów to po prostu robimy
-
-    changesTable.addEventListener("click", colorRightColumn);  
+    changesTable.addEventListener("click", colorRightColumn);
 }
 
 function Zadanie7_4() {
-    // form.onchange = () => {
-    //     if (valid_form()){
-    //         showElement(submitButton);
-    //     } else {
-    //         hideElement(submitButton);
-    //     }
-    // }
-
-    const tmpFunction = () => {
-        if (valid_form()){
-            showElement(submitButton);
+    const submitButtonListener = () => {
+        if (valid_form()) {
+            submitButton.removeAttribute('disabled');
         } else {
-            hideElement(submitButton);
+            submitButton.setAttribute('disabled', 'yes');
         }
-    };
+    }
 
-    tmpFunction();
+    submitButtonListener();
 
-    form.addEventListener("input", tmpFunction);
-    submitButton.addEventListener("click", (e:Event) => preventDefaultAndRun(e, presentReservationForm));
+    form.addEventListener("input", submitButtonListener);
+    submitButton.addEventListener("click", (e:Event) => presentReservationForm(e));
 }
 
-function presentReservationForm() {
-    let wiadomosc = "Udało się\n" + 
-    `Pasazer: ${nameInput.value}\n` + 
-    `Skąd: ${fromInput.value}\n` + 
-    `Dokąd: ${toInput.value}\n` + 
+function presentReservationForm(e : Event) {
+    e.preventDefault();
+
+    const wiadomosc = "Udało się\n" +
+    `Pasazer: ${nameInput.value}\n` +
+    `Skąd: ${fromInput.value}\n` +
+    `Dokąd: ${toInput.value}\n` +
     `Data: ${dateInput.value}\n`;
 
     showPopUp(wiadomosc);
@@ -107,17 +98,17 @@ function colorRightColumn() {
     console.log(fib(10 * clicks++)); // Zadanie 7_4
     // Przeglądarka po kilku kliknięciach się zawiesza, bo obliczenia trwają są zbyt kosztowne
 
-    let currentColor = window.getComputedStyle(form).getPropertyValue('background-color');
-    let [_,...colorsAsText] =/rgb[a]?\((\d+),[^0-9]*(\d+),[^0-9]*(\d+)[,]?[^0-9]*(\d*)\)/.exec(currentColor);
-    let colors: number[] = [];
-    for(let i = 0; i < 3; i++) colors[i] = (parseInt(colorsAsText[i]) + 0x20) % 256;
+    const currentColor = window.getComputedStyle(form).getPropertyValue('background-color');
+    const [_,...colorsAsText] =/rgb[a]?\((\d+),[^0-9]*(\d+),[^0-9]*(\d+)[,]?[^0-9]*(\d*)\)/.exec(currentColor);
+    const colors: number[] = [];
+    for(let i = 0; i < 3; i++) colors[i] = (Number(colorsAsText[i]) + 0x20) % 256;
 
     changesTable.style.backgroundColor = `rgb(${colors[0]},${colors[1]},${colors[2]})`;
     form.style.backgroundColor = `rgb(${colors[0]},${colors[1]},${colors[2]})`;
 }
 
 async function fetchGithubPicture() {
-    let baseUrl = 'https://api.github.com/repos/Microsoft/TypeScript/commits';
+    const baseUrl = 'https://api.github.com/repos/Microsoft/TypeScript/commits';
 
     fetch(baseUrl).then((response) => response.json())
     .then(data => {
@@ -159,13 +150,9 @@ function set_timeout(timeOfTimeout : number) {
     return new Promise((resolve, reject) => setTimeout(() => {resolve()}, timeOfTimeout));
 }
 
-function preventDefaultAndRun(e:Event, someFunction) {
+function fillFormWithDefault(e : Event) {
     e.preventDefault();
-    someFunction();
-}
-
-function fillFormWithDefault() {
-    nameInput.value = "Tutaj wpisz imię"
+    nameInput.value = ""
     dateInput.value = getCurrentDate();
 }
 
@@ -174,31 +161,21 @@ function getCurrentDate() : string {
 }
 
 function valid_form() : boolean {
-    if (dateInput.value == "" || dateInput.value < getCurrentDate()) { 
+    if (dateInput.value === "" || dateInput.value < getCurrentDate()) {
         return false;
     }
 
-    if (nameInput.value == "") {
+    const nameSplit : string[] = nameInput.value.split(' ');
+
+    if (nameSplit.length !== 2) {
         return false;
     }
 
-    if (nameInput.value.search(' ') == -1){ // imie i nazwisko, a nie jeden wyraz
+    if (nameSplit[0] === "" || nameSplit[1] === "") {
         return false;
-    } 
+    }
 
     return true;
-}
-
-function checkForm() {
-    if (dateInput.value == "" || dateInput.value < getCurrentDate()) { 
-        showPopUp("Niepoprawna data");
-        return;
-    }
-
-    if (nameInput.value == "") {
-        showPopUp("Wpisz imię i nazwisko");
-        return;
-    }
 }
 
 function showPopUp(messege : string) {
@@ -215,19 +192,19 @@ function showElement(element : HTMLElement) {
 
 function hideElement(element : HTMLElement) {
     element.style.visibility = 'hidden';
-    
+
     if (element instanceof HTMLInputElement)
         element.disabled = true;
 }
 
 function createDivAppendToBody(text: string) {
-    let newElement = document.createElement('div');
+    const newElement = document.createElement('div');
     newElement.textContent = text;
     document.body.appendChild(newElement);
 }
 
 function createImgAppendToBody(sourceUrl: string) {
-    let newElement = document.createElement('img');
+    const newElement = document.createElement('img');
     newElement.src = sourceUrl;
     document.body.appendChild(newElement);
 }

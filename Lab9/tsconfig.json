@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "lib": ["es2017", "DOM"],
+        "strict": true, 
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outDir": "src/js",
+    },
+    "files": [
+        "src/ts/mem.ts"
+    ]
+}

@@ -1,5 +1,14 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+html
+  head
+      title= title
+  style
+      include style.css
+  body
+      h1= message
+      img(src="http://www.mimuw.edu.pl/")
+      h1="Meme list"
+      ul
+        each meme in memes
+          li
+            a(href="meme/" + meme.id) #{meme.name}
+            img(src=meme.url)

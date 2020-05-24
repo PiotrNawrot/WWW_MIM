@@ -104,4 +104,20 @@ describe('confirmationCheck', function () {
         await driver.find('#close_popup').doClick();
         expect(await driver.find('#hide_square').isDisplayed()).to.equal(false);
     });
+
+    it('links blocked with confirmation on', async function() {
+        await driver.get(path);
+        await fillData(fullName, nextYear, origin, destination);
+        expect(await driver.find('input[type=submit]').isEnabled()).to.equal(true);
+        await driver.find('input[type=submit]').doClick();
+        expect(await driver.find('#hide_square').isDisplayed()).to.equal(true);
+        expect(await driver.find('input[type=reset]').click().then(() => true).catch(() => false)).to.equal(false);
+    });
+
+    it('links not blocked with confirmation off', async function() {
+        await driver.get(path);
+
+        expect(await driver.find('#hide_square').isDisplayed()).to.equal(false);
+        expect(await driver.find('input[type=reset]').click().then(() => true).catch(() => false)).to.equal(true);
+    });
 });

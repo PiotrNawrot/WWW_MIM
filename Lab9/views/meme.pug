@@ -1,0 +1,19 @@
+html
+    head
+        title= title
+    style
+        include style.css
+    body
+        p You clicked best meme possible
+        p Current price - #{meme.price}
+        img(src=meme.url)
+        h1="Price history"
+        table
+            each price in meme.priceHistory
+                tr
+                    td=price
+
+        form(method='POST' action='/meme/' + meme.id)
+            label="New price"
+            input(type='number', name='price')
+            input(type='submit'  value='Submit')

@@ -12,6 +12,7 @@
         "outDir": "src/js",
     },
     "files": [
-        "src/ts/mem.ts"
+        "src/ts/mem.ts",
+        "src/ts/Memes.ts"
     ]
 }

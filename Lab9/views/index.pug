@@ -1,0 +1,15 @@
+html
+    head
+        title= title
+    style
+        include style.css
+    body
+        h1= message
+        img(src="https://i.pinimg.com/originals/b6/b9/94/b6b9947e30d6f9db45f497ef6561c2bc.jpg")
+        h1="Meme list"
+        ul
+            each meme in memes
+                li
+                    a(href="meme/" + meme.id) #{meme.name}
+                    p Price #{meme.price} 
+                    img(src=meme.url)

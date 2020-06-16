@@ -1,49 +1,130 @@
+import * as sqlite from 'sqlite3';
+import {DbHandlerOpen, DbHandlerAll, DbHandlerRun, DbHandlerGet} from "./DBWrapper"
+
 export class Memes {
     id: number;
     name: string;
-    price: number;
     url: string;
-    priceHistory: number[];
+    priceHistory: [number, string][];
 
     constructor(id: number, name: string, price: number, url: string) {
         this.id = id;
         this.name = name;
-        this.price = price;
         this.url = url;
-        this.priceHistory = [];
+        this.priceHistory = [[price, "Initial"]];
     }
 
-    change_price(newPrice: number) {
-        this.priceHistory.unshift(this.price);
-        this.price = newPrice;
+    getCurrentPrice() : number {
+        return this.priceHistory[0][0];
+    }
+
+    change_price(newPrice: number, nick : string) {
+        this.priceHistory.unshift([newPrice, nick]);
+    }
+
+    flatPrices(): string {
+        return this.priceHistory.map((val) => `${val[0]},${val[1]}`).join(';');
+    }
+
+    save(db: sqlite.Database)  {
+        return DbHandlerRun(db, `INSERT OR REPLACE INTO memes (id, name, url, prices) VALUES (${this.id}, '${this.name}', '${this.url}', '${this.flatPrices()}');`, []);
     }
 }
 
 export class MemesCollection {
-    memesCollection : Memes[];
-
-    constructor() {
-        this.memesCollection = [];
+    add(db: sqlite.Database, meme: Memes) {
+        return meme.save(db);
     }
 
-    add(memes : Memes) {
-        this.memesCollection.push(memes);
-    }
+    allMemes(db: sqlite.Database): Promise<Memes[]> {
+        return new Promise((resolve, reject) => {
+            db.all(`SELECT id, name, url, prices FROM memes;`, (err, rows) => {
+                if(err) {
+                    reject('DB Error');
+                    return;
+                }
 
-    best_memes() {
-        return this.memesCollection.sort( (x : Memes, y : Memes) => {
-            return y.price - x.price;
-        }).slice(0, 3);
-    }
+                const memes : Memes[] = [];
 
-    get_meme(id: number) : Memes | null {
-        let memeResult = null;
+                for (const row of rows) {
+                    const parsedPrices: [number, string][] = [];
 
-        this.memesCollection.forEach((element : Memes) => {
-            if (element.id === id)
-                memeResult = element;
+                    for(const priceAuthor of row.prices.split(';')) {
+                        const [price, by] = priceAuthor.split(',');
+                        parsedPrices.push([price, by]);
+                    }
+
+                    const meme : Memes = new Memes(row.id, row.name, parsedPrices.pop()![0], row.url);
+
+                    while(parsedPrices.length) {
+                        meme.change_price(...parsedPrices.pop()!);
+                    }
+
+                    memes.push(meme);
+                }
+
+                resolve(memes);
+            });
         });
+    }
 
-        return memeResult;
+    mostExpensiveMemes(db: sqlite.Database): Promise<Memes[]> {
+        return new Promise((resolve, reject) => {
+            db.all(`SELECT id, name, url, prices FROM memes;`, (err, rows) => {
+                if(err) {
+                    reject('DB Error');
+                    return;
+                }
+
+                const memes : Memes[] = [];
+
+                for (const row of rows) {
+                    const parsedPrices: [number, string][] = [];
+
+                    for(const priceAuthor of row.prices.split(';')) {
+                        const [price, by] = priceAuthor.split(',');
+                        parsedPrices.push([price, by]);
+                    }
+
+                    const meme : Memes = new Memes(row.id, row.name, parsedPrices.pop()![0], row.url);
+
+                    while(parsedPrices.length) {
+                        meme.change_price(...parsedPrices.pop()!);
+                    }
+
+                    memes.push(meme);
+                }
+
+                resolve(memes.sort( (x : Memes, y : Memes) => {
+                    return y.getCurrentPrice() - x.getCurrentPrice();
+                }).slice(0, 3));
+            });
+        });
+    }
+
+    get_meme(db: sqlite.Database, id: number) : Promise<Memes> {
+        return new Promise((resolve, reject) => {
+            db.all(`SELECT id, name, url, prices FROM memes;`, (err, rows) => {
+                if(err) {
+                    reject('DB Error');
+                    return;
+                }
+                for (const row of rows) {
+                    const parsedPrices: [number, string][] = [];
+                    for(const priceAuthor of row.prices.split(';')) {
+                        parsedPrices.push(priceAuthor.split(','));
+                    }
+
+                    const meme = new Memes(row.id, row.name, parsedPrices.pop()![0], row.url);
+                    while(parsedPrices.length) {
+                        meme.change_price(...parsedPrices.pop()!);
+                    }
+
+                    if (row.id === id) {
+                        return resolve(meme);
+                    }
+                }
+            });
+        });
     }
 }

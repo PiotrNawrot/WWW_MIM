@@ -3,6 +3,8 @@
         "target": "es6",
         "module": "commonjs",
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
         "lib": ["es2017", "DOM"],
         "strict": true, 
         "noImplicitAny": true,
@@ -11,8 +13,7 @@
         "sourceMap": true,
         "outDir": "src/js",
     },
-    "files": [
-        "src/ts/mem.ts",
-        "src/ts/Memes.ts"
+    "include": [
+        "src/ts/*"
     ]
 }

@@ -49,6 +49,17 @@ describe("MemesCollection tests", () => {
         expect(memesCollection.best_memes()[2].price).to.equal(6);
     });
 
+    it('Best memes, quantity < 3', () => {
+        const memesCollection = new MemesCollection();
+
+        memesCollection.add(new Memes(1, "name", 5, "url"));
+        memesCollection.add(new Memes(2, "name", 6, "url"));
+
+        expect(memesCollection.best_memes().length).to.equal(2);
+        expect(memesCollection.best_memes()[0].price).to.equal(6);
+        expect(memesCollection.best_memes()[1].price).to.equal(5);
+    });
+
     it('Get meme', () => {
         const memesCollection = new MemesCollection();
         const memes = new Memes(1, "name", 5, "url");

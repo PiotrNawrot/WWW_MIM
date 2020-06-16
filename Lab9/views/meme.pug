@@ -5,15 +5,16 @@ html
         include style.css
     body
         p You clicked best meme possible
-        p Current price - #{meme.price}
+        p Current price - #{meme.getCurrentPrice()}
         img(src=meme.url)
         h1="Price history"
         table
             each price in meme.priceHistory
                 tr
-                    td=price
+                    td=price[0]
 
         form(method='POST' action='/meme/' + meme.id)
             label="New price"
             input(type='number', name='price')
             input(type='submit'  value='Submit')
+            input(type="hidden", name="_csrf", value=csrfToken)

@@ -49,10 +49,12 @@ export class MemesCollection {
                         await DbHandlerRun(db, "COMMIT;", []);
                         resolve(meme);
                     }).catch(async () => {
+                        await DbHandlerRun(db, "ROLLBACK;", []);
                         return this.updateMemePrice(db, memeID, newPrice, username);
                     })
                 }
             }).catch(async () => {
+                await DbHandlerRun(db, "ROLLBACK;", []);
                 return this.updateMemePrice(db, memeID, newPrice, username);
             })
         })

@@ -75,7 +75,6 @@ dbInitialization().then( () => {
             memesCollection.updateMemePrice(response.locals.db, parseInt(request.params.memeId, 10), request.body.price, request.session!.username).then((meme) => {
                 response.render('meme', { 'meme': meme, csrfToken: request.csrfToken() });
             }).catch(() => {
-                console.log('zly input');
                 next(createError(400));
             })
         } else {

@@ -17,9 +17,7 @@ const user : User = new User();
 
 async function dbInitialization() {
     const db : sqlite.Database = await DbHandlerOpen("memes.db");
-    await DbHandlerRun(db, `CREATE TABLE IF NOT EXISTS memes (
-        id INTEGER PRIMARY KEY, name TEXT, url TEXT);`, []);
-
+    await DbHandlerRun(db, `CREATE TABLE IF NOT EXISTS memes (id INTEGER PRIMARY KEY, name TEXT, url TEXT, prices TEXT);`, []);
     await DbHandlerRun(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username VARCHAR, password VARCHAR)", []);
     await user.addUser(db, 1, "admin", "admin");
     await user.addUser(db, 2, "user", "user");
@@ -32,105 +30,96 @@ async function dbInitialization() {
     memesCollection.add(db, new Memes(4, 'Fast doggo', 1500, 'https://i0.kym-cdn.com/photos/images/newsfeed/001/092/510/e30.jpg'));
 }
 
-dbInitialization();
+dbInitialization().then( () => {
+    app.use(cookieParser('randomkey'));
 
-app.use(cookieParser());
+    app.use(express.urlencoded({
+        extended: true
+    }));
 
-app.use(express.urlencoded({
-    extended: true
-}));
+    app.use(session({
+        resave: false,
+        saveUninitialized: true,
+        secret: 'randomkey',
+        store: new connectSqlite(session)()
+    }));
 
-app.use(session({
-    resave: false,
-    saveUninitialized: true,
-    secret: 'randomkey',
-    store: new connectSqlite(session)()
-}));
+    app.set('view engine', 'pug');
 
-app.set('view engine', 'pug');
-
-// New connection instance with database for every requests using middleware - transaction should not overlap
-app.use((request: express.Request, response: express.Response, next: express.NextFunction) => {
-    response.locals.db = new sqlite.Database("memes.db");
-    next();
-})
-
-// Main page rendering
-app.get('/', async function(request: express.Request, response: express.Response) {
-    response.render('index', { title: 'Meme market', message: 'Hello there!', memes: await memesCollection.mostExpensiveMemes(response.locals.db),
-                                    username: request.session!.username});
-});
-
-// Meme site rendering
-app.get('/meme/:memeId', csrfProtection, async function (request: express.Request, response: express.Response, next: express.NextFunction) {
-    const meme = await memesCollection.get_meme(response.locals.db, parseInt(request.params.memeId, 10));
-
-    if (meme == null) {
-        next(createError(400));
-    }
-
-    response.render('meme', { 'meme': meme, csrfToken: request.csrfToken() });
-});
-
-// Meme price changing
-app.post('/meme/:memeId', csrfProtection, async function(request: express.Request, response: express.Response, next: express.NextFunction) {
-    await DbHandlerRun(response.locals.db, "BEGIN TRANSACTION;", []);
-    const price = request.body.price;
-    memesCollection.get_meme(response.locals.db, parseInt(request.params.memeId, 10)).then(async (meme) => {
-        if (meme === null || isNaN(price)){
-            next(createError(400));
-            await DbHandlerRun(response.locals.db, "ROLLBACK;", []);
-        } else {
-            meme.change_price(price, request.session!.username);
-            meme.save(response.locals.db).then(async() => {
-                await DbHandlerRun(response.locals.db, "COMMIT;", []);
-            }).catch(async () => {
-                await DbHandlerRun(response.locals.db, "ROLLBACK;", []);
-            })
-            response.render('meme', { 'meme': meme, csrfToken: request.csrfToken() });
-        }
-    }).catch(async () => {
-        await DbHandlerRun(response.locals.db, "ROLLBACK;", []);
+    // New connection instance with database for every requests using middleware - transaction should not overlap
+    app.use((request: express.Request, response: express.Response, next: express.NextFunction) => {
+        response.locals.db = new sqlite.Database("memes.db");
+        next();
     })
-});
 
-// Login site rendering
-app.get('/login', csrfProtection, function (request: express.Request, response: express.Response, next: express.NextFunction) {
-    return response.render('login', {
-        csrfToken: request.csrfToken()
+    // Main page rendering
+    app.get('/', async function(request: express.Request, response: express.Response) {
+        response.render('index', { title: 'Meme market', message: 'Hello there!', memes: await memesCollection.mostExpensiveMemes(response.locals.db),
+                                        username: request.session!.username});
     });
-});
 
-// Logging to system
-app.post('/login', csrfProtection, async function (request: express.Request, response: express.Response, next: express.NextFunction) {
-    if (await user.getUser(response.locals.db, request.body.username, request.body.password)) {
-        request.session!.username = request.body.username;
-        console.log("true");
-    }
+    // Meme site rendering
+    app.get('/meme/:memeId', csrfProtection, async function (request: express.Request, response: express.Response, next: express.NextFunction) {
+        const meme = await memesCollection.get_meme(response.locals.db, parseInt(request.params.memeId, 10));
 
-    response.redirect('/');
-});
+        if (meme == null) {
+            next(createError(400));
+        }
 
-// Logout from the system
-app.get('/logout', function (request: express.Request, response: express.Response, next: express.NextFunction) {
-    delete(request.session!.username);
-    response.redirect('/');
-});
+        response.render('meme', { 'meme': meme, csrfToken: request.csrfToken() });
+    });
 
-// Express server listen and console info
-app.listen(8080, () => {
-    console.log("App is running at http://localhost:%d\n", 8080);
-    console.log("Press CTRL-C to stop\n");
-});
+    // Meme price changing
+    app.post('/meme/:memeId', csrfProtection, async function(request: express.Request, response: express.Response, next: express.NextFunction) {
+        if (request.session!.username){
+            memesCollection.updateMemePrice(response.locals.db, parseInt(request.params.memeId, 10), request.body.price, request.session!.username).then((meme) => {
+                response.render('meme', { 'meme': meme, csrfToken: request.csrfToken() });
+            }).catch(() => {
+                console.log('zly input');
+                next(createError(400));
+            })
+        } else {
+            next(createError(400));
+        }
+    });
 
-// Error handling
-app.use(function(request: express.Request, response: express.Response, next: express.NextFunction) {
-    next(createError(404));
-});
+    // Login site rendering
+    app.get('/login', csrfProtection, function (request: express.Request, response: express.Response, next: express.NextFunction) {
+        return response.render('login', {
+            csrfToken: request.csrfToken()
+        });
+    });
 
-app.use((err: any, request: express.Request, response: express.Response, next: express.NextFunction) => {
-    response.locals.message = err.message;
-    response.locals.error = request.app.get('env') === 'development' ? err : {};
-    response.status(err.status || 500);
-    response.render('error');
-});
+    // Logging to system
+    app.post('/login', csrfProtection, async function (request: express.Request, response: express.Response, next: express.NextFunction) {
+        if (await user.getUser(response.locals.db, request.body.username, request.body.password)) {
+            request.session!.username = request.body.username;
+        }
+
+        response.redirect('/');
+    });
+
+    // Logout from the system
+    app.get('/logout', function (request: express.Request, response: express.Response, next: express.NextFunction) {
+        delete(request.session!.username);
+        response.redirect('/');
+    });
+
+    // Express server listen and console info
+    app.listen(8080, () => {
+        console.log("App is running at http://localhost:%d\n", 8080);
+        console.log("Press CTRL-C to stop\n");
+    });
+
+    // Error handling
+    app.use(function(request: express.Request, response: express.Response, next: express.NextFunction) {
+        next(createError(404));
+    });
+
+    app.use((err: any, request: express.Request, response: express.Response, next: express.NextFunction) => {
+        response.locals.message = err.message;
+        response.locals.error = request.app.get('env') === 'development' ? err : {};
+        response.status(err.status || 500);
+        response.render('error');
+    });
+})
